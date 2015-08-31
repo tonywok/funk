@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class FnGraphTest < Minitest::Test
+class FunkTest < Minitest::Test
   def test_that_it_has_a_version_number
-    refute_nil ::FnGraph::VERSION
+    refute_nil ::Funk::VERSION
   end
 
   def test_it_does_something_useful
