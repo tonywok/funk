@@ -1,3 +1,6 @@
+require "funk/node"
+require "funk/evaluator"
+
 module Funk
   class Graph
     attr_reader :nodes
@@ -21,14 +24,6 @@ module Funk
 
     def compile
       lambda { |inputs| Evaluator.new(@nodes, inputs).compute }
-    end
-
-    def inspect
-      @nodes.each do |name, node|
-        puts "Name : #{name}"
-        puts "Edges: #{node.edges.map(&:name).join(", ")}"
-        puts
-      end
     end
   end
 end

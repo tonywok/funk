@@ -16,6 +16,7 @@ module Funk
       nodes.each do |name, node|
         resolve(node) unless @results[node.name]
       end
+      @results
     end
 
     def resolve(node)
