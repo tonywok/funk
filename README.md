@@ -1,8 +1,6 @@
 # Funk
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/funk`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Funk is an structured computation implementation inspired by Pristmatic's [Graph](https://github.com/Prismatic/plumbing#graph-the-functional-swiss-army-knife) library.
 
 ## Installation
 
@@ -22,7 +20,31 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+graph = Funk::Graph.new({
+  a: -> (b, d) { "#{b}, #{d}" },
+  b: -> (c, e) { "#{c}, #{e}" },
+  c: -> (d, e, h) { "#{d}, #{e}, #{h}" }
+})
+
+compiled_graph = graph.compile
+compiled_graph.call({
+  d: "d",
+  e: "e",
+  h: "h",
+})
+
+# evaluates to:
+#
+# {
+#   :d=>"d",
+#   :e=>"e",
+#   :h=>"h",
+#   :c=>"d, e, h",
+#   :b=>"d, e, h, e",
+#   :a=>"d, e, h, e, d”,
+# }
+```
 
 ## Development
 
@@ -32,7 +54,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/funk. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/tonywok/funk. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License
