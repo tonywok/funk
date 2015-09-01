@@ -1,8 +1,10 @@
 # Funk
 
-Funk is an structured computation implementation inspired by Pristmatic's [Graph](https://github.com/Prismatic/plumbing#graph-the-functional-swiss-army-knife) library.
+Funk is an structured computation implementation inspired by Prismatic's [Graph](https://github.com/Prismatic/plumbing#graph-the-functional-swiss-army-knife) library.
 
 ## Installation
+
+_Note:_ This has not yet been released on rubygems, but will be shortly.
 
 Add this line to your application's Gemfile:
 
