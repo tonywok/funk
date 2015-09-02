@@ -3,10 +3,9 @@ require "funk/evaluator"
 
 module Funk
   class Graph
-    attr_reader :nodes
 
-    def initialize(map)
-      @nodes = map.each_with_object({}) do |(name, impl), obj|
+    def initialize(fns)
+      fns.each_with_object({}) do |(name, impl), obj|
         node = obj[name] || Node.new(name, impl)
         impl.parameters.each do |_, name|
           edge = if obj[name]
@@ -22,8 +21,5 @@ module Funk
       end
     end
 
-    def compile
-      lambda { |inputs| Evaluator.new(@nodes, inputs).compute }
-    end
   end
 end
