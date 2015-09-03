@@ -3,10 +3,9 @@ module Funk
 
     class MissingDependency < StandardError; end
 
-    attr_reader :name, :content, :edges
+    attr_reader :content, :edges
 
-    def initialize(name, content=nil)
-      @name = name
+    def initialize(content=nil)
       @content = content
       @edges = []
     end
@@ -15,15 +14,19 @@ module Funk
       @edges << edge
     end
 
+    def label
+      content.name
+    end
+
     def leaf?
       edges.empty?
     end
 
     def to_s
       if leaf?
-        name.inspect
+        label.inspect
       else
-        "#{name.inspect} -> (#{edges.map{ |e| e.to_s }.join(', ')})"
+        "#{label.inspect} -> (#{edges.map{ |e| e.to_s }.join(', ')})"
       end
     end
   end

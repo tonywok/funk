@@ -2,14 +2,16 @@ require "set"
 
 module Funk
   class Fn
-    include Helpers
 
+    attr_reader :name
     attr_reader :dependencies
 
-    def initialize(callable)
+    def initialize(name, callable)
+      @name = name
       @dependencies = callable.parameters.map(&:last)
       @fn = callable
     end
+
 
     def call(hash)
       assert_dependencies_present_in(hash)

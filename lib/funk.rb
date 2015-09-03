@@ -5,7 +5,7 @@ module Funk
 
   def compile(fns={}, strategy: Funk::Evaluators::Eager, instruments: [])
     graph = Graph.new(fns)
-    strategy.new(graph)
+    strategy.new(graph, instruments: instruments)
   end
 
   def compile_module(mod, **args)
