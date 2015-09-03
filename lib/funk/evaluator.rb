@@ -25,12 +25,7 @@ module Funk
         @results
       end
 
-
-
       def resolve(node)
-        graph.walk do |node|
-          asdlasjdljasd
-        end
         @unresolved << node
         node.edges.each do |edge|
           if @results[edge.name].nil?
@@ -40,18 +35,14 @@ module Funk
             resolve(edge)
           end
         end
-        @results[node.name] = if node.fnk.nil?
-                                @inputs[node.name]
-                              else
-                                deps = node.fnk.parameters.map { |_,p| p }
-                                args = deps.map { |d| @results[d] }
-                                node.fnk.call(*args)
-                              end
+        @results[node.name] = if node.content.nil?
+          @inputs[node.name]
+        else
+          deps = node.fnk.parameters.map { |_,p| p }
+          args = deps.map { |d| @results[d] }
+          node.fnk.call(*args)
+        end
         @unresolved.delete(node)
-      end
-
-      def topological_sort
-
       end
 
     end
