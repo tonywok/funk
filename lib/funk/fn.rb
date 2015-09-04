@@ -1,6 +1,9 @@
 require "set"
 
 module Funk
+
+  class MissingDepenciesException < StandardError; end
+
   class Fn
 
     attr_reader :name
@@ -21,12 +24,11 @@ module Funk
 
     private
 
-    # TODO: support optional arguments
     def assert_dependencies_present_in(hash)
       present_keys = Set.new(hash.keys)
       deps = Set.new(dependencies)
       unless deps.subset?(present_keys)
-        raise "Missing dependencies #{deps.difference(present_keys).to_a}"
+        raise MissingDepenciesException, "Fn #{name} is missing dependencies #{deps.difference(present_keys).to_a}"
       end
     end
   end

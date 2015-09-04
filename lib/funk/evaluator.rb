@@ -1,20 +1,6 @@
 module Funk
 
-  class CircularDependencyException < StandardError; end
-
-  class Result
-    def initialize(input)
-      @input = input
-      @result = {}
-    end
-
-    def call(fn)
-      args = fn.dependencies
-      fn.call(@result.merge(@input))
-    end
-  end
-
-  module Evaluator
+  module Evaluators
 
     class Eager
       attr_reader :graph, :instruments
@@ -28,8 +14,8 @@ module Funk
         return_value = {}
         return_value[:input] = input
         return_value[:instruments] = @instruments
-        return_value[:computed] = @graph.walk.inject({}) do |result, (name, fn)|
-          result[name] = evaluate(fn, result.merge(input))
+        return_value[:computed] = @graph.tsort.each_with_object({}) do |fn, result|
+          result[fn.name] = evaluate(fn, result.merge(input))
         end
 
         return_value

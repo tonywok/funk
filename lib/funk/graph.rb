@@ -1,43 +1,36 @@
-require "funk/node"
-require "funk/evaluator"
+require "tsort"
+require "funk/fn"
+require "funk/input_fn"
 
 module Funk
   class Graph
 
-    def initialize(fns)
-      nodes = fns.each_with_object({}) do |(fn_name, impl), obj|
-        fn = Fn.new(fn_name, impl)
-        node = Node.new(fn)
-        obj[fn_name] = node
+    def initialize(map)
+      fn_map = map.each_with_object({}) do |(name, impl), fn_map|
+        fn = fn_map[name] = Fn.new(name, impl)
+        fn.dependencies.each do |dep_name|
+          fn_map[dep_name] ||= InputFn.new(dep_name) unless map.key?(dep_name)
+        end
       end
-
-      leaf_nodes = {}
-      nodes.each do |node|
-        node.dependencies.each do |dep_name|
-          if dep_node = nodes[dep_name] || leaf_nodes[dep_name]
-            node.add_edge(dep_node)
-          else
-            fn = InputFn.new(dep_name)
-            dep_node = Node.new(fn)
-            leaf_nodes[dep_name] = dep_node
-            node.add_edge(dep_node)
-          end
+      accum = Hash.new { |h,k| h[k] =[] }
+      @nodes = fn_map.each_with_object(accum) do |(name, fn), graph|
+        graph[fn] = []
+        fn.dependencies.each do |dep_name|
+          graph[fn] << fn_map[dep_name]
         end
       end
     end
 
-    # TODO: return enumerator which yields each computable fn in dependency order
-    def walk
-      @unresolved << node
-      node.edges.each do |edge|
-        if @results[edge.name].nil?
-          if @unresolved.include?(edge)
-            raise CircularDependencyException, "cyle detected between '#{node.name}' and '#{edge.name}'."
-          end
-          resolve(edge)
-        end
-      end
-      @unresolved.delete(node)
+    # Topological Sort - exposes tsort enum
+    #
+    include TSort
+
+    def tsort_each_child(n, &b)
+      @nodes[n].each(&b)
+    end
+
+    def tsort_each_node(&b)
+      @nodes.each_key(&b)
     end
 
   end
