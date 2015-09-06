@@ -1,24 +1,18 @@
+require "funk/result"
+
 module Funk
-
   module Evaluators
-
     class Eager
       attr_reader :graph, :instruments
 
       def initialize(graph, instruments: [])
-        @graph = graph
-        @instruments = instruments.map { |i| i.new }
+        @graph, @instruments = graph, instruments
       end
 
       def call(input)
-        return_value = {}
-        return_value[:input] = input
-        return_value[:instruments] = @instruments
-        return_value[:computed] = @graph.tsort.each_with_object({}) do |fn, result|
+        @graph.tsort.each_with_object(Result.new(@instruments.map{ |i| i.new })) do |fn, result|
           result[fn.name] = evaluate(fn, result.merge(input))
         end
-
-        return_value
       end
 
       private

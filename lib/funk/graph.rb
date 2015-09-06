@@ -12,7 +12,7 @@ module Funk
           fn_map[dep_name] ||= InputFn.new(dep_name) unless map.key?(dep_name)
         end
       end
-      accum = Hash.new { |h,k| h[k] =[] }
+      accum = Hash.new { |h,k| h[k] = [] }
       @nodes = fn_map.each_with_object(accum) do |(name, fn), graph|
         graph[fn] = []
         fn.dependencies.each do |dep_name|

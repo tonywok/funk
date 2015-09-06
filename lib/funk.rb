@@ -1,6 +1,6 @@
 require "funk/version"
 require "funk/graph"
-require "funk/evaluator"
+require "funk/evaluators/eager"
 
 module Funk
 
