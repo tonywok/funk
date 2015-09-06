@@ -35,10 +35,10 @@ describe Funk do
   describe "compile" do
 
     it "works" do
-      result = Funk.compile(fns: {
+      result = Funk.compile(
         a: -> (b, c) { b + c },
-        b: -> (c) { c + 10 },
-      }).call(c: 2)
+        b: -> (c) { c + 10 }
+      ).call(c: 2)
 
       result[:a].must_equal(14)
       result[:b].must_equal(12)
@@ -48,7 +48,7 @@ describe Funk do
 
       it "self reference" do
         identity = { a: -> (a) { a } }
-        policy = Funk.compile(fns: identity)
+        policy = Funk.compile(identity)
         err = lambda { policy.call({}) }.must_raise(Funk::MissingDepenciesException)
         err.message.must_match "Fn a is missing dependencies [:a]"
       end
@@ -61,9 +61,28 @@ describe Funk do
           a: -> (b) { b },
           b: -> (a) { a },
         }
-        policy = Funk.compile(fns: cycle)
+        policy = Funk.compile(cycle)
         lambda { policy.call({}) }.must_raise(TSort::Cyclic)
       end
+    end
+  end
+
+  describe "various graph scenarios" do
+
+    it "statistics" do
+      stats = Funk.compile(
+        count: -> (items) { items.length },
+        mean:  -> (items, count) { (items.reduce(:+) / count).round(1) },
+        mean_sq: -> (items, count) { (items.reduce(1) { |m, i| m + i**2 } / count).round(1) },
+        variance: -> (mean, mean_sq) { (mean_sq - mean**2).round(1) }
+      )
+      stats.call(items: [1.0,1,2,3,5,8,13]).must_equal(
+        items: [1,1,2,3,5,8,13],
+        count: 7,
+        mean:  4.7,
+        mean_sq: 39.1,
+        variance: 17.0
+      )
     end
   end
 end

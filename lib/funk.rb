@@ -4,7 +4,7 @@ require "funk/evaluators/eager"
 
 module Funk
 
-  def self.compile(fns: {}, strategy: Funk::Evaluators::Eager, instruments: [])
+  def self.compile(fns, strategy: Funk::Evaluators::Eager, instruments: [])
     graph = Graph.new(fns)
     strategy.new(graph, instruments: instruments)
   end
@@ -15,7 +15,7 @@ module Funk
       m = mod.instance_method(meth)
       hash[meth] = m.bind(dummy_receiver)
     end
-    compile(fns: fn_hash, **args)
+    compile(fn_hash, **args)
   end
 
 end
