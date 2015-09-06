@@ -26,9 +26,9 @@ describe Funk do
         amount: 110_000,
       })
 
-      result[:computed][:holdback_max].must_equal(15_000)
-      result[:computed][:sub_holdback].must_equal(500)
-      result[:computed][:holdback].must_equal(20_000)
+      result[:holdback_max].must_equal(15_000)
+      result[:sub_holdback].must_equal(500)
+      result[:holdback].must_equal(20_000)
     end
   end
 
@@ -40,8 +40,8 @@ describe Funk do
         b: -> (c) { c + 10 },
       }).call(c: 2)
 
-      result[:computed][:a].must_equal(14)
-      result[:computed][:b].must_equal(12)
+      result[:a].must_equal(14)
+      result[:b].must_equal(12)
     end
 
     describe "missing dependencies" do
