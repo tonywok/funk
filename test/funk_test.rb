@@ -69,7 +69,7 @@ describe Funk do
 
   describe "various graph scenarios" do
 
-    it "statistics" do
+    it "calculates statistics" do
       stats = Funk.compile(
         count: -> (items) { items.length },
         mean:  -> (items, count) { (items.reduce(:+) / count).round(1) },
@@ -82,6 +82,32 @@ describe Funk do
         mean:  4.7,
         mean_sq: 39.1,
         variance: 17.0
+      )
+    end
+
+    it "calculates a big, rather unordered tree" do
+      stats = Funk.compile(
+        a: -> (z, y) { z + y },
+        b: -> (a, y) { a + y },
+        c: -> (x, w) { x + w },
+        d: -> (a, c) { a + c },
+        e: -> (f, g) { f + g },
+        f: -> (w, x) { w + x },
+        g: -> (c, d) { c + d }
+      )
+
+      stats.call(w:1, x:2, y:3, z:4).must_equal(
+        a: 7,
+        b: 10,
+        c: 3,
+        d: 10,
+        e: 16,
+        f: 3,
+        g: 13,
+        w: 1,
+        x: 2,
+        y: 3,
+        z: 4
       )
     end
   end
