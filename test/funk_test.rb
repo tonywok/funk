@@ -16,7 +16,7 @@ describe Funk do
     end
   end
 
-  describe "compile_function" do
+  describe "compile_module" do
 
     it "works" do
       policy = Funk.compile_module(Example)
