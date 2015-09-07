@@ -86,7 +86,7 @@ describe Funk do
     end
 
     it "calculates a big, rather unordered tree" do
-      stats = Funk.compile(
+      sums = Funk.compile(
         a: -> (z, y) { z + y },
         b: -> (a, y) { a + y },
         c: -> (x, w) { x + w },
@@ -96,7 +96,7 @@ describe Funk do
         g: -> (c, d) { c + d }
       )
 
-      stats.call(w:1, x:2, y:3, z:4).must_equal(
+      sums.call(w:1, x:2, y:3, z:4).must_equal(
         a: 7,
         b: 10,
         c: 3,
@@ -108,6 +108,30 @@ describe Funk do
         x: 2,
         y: 3,
         z: 4
+      )
+    end
+
+    it "calculates a tree with multiple roots" do
+      sums = Funk.compile(
+        c: -> (a, b) { a + b },
+        d: -> (a, c) { a + c },
+        e: -> (b, c) { b + c },
+        f: -> (g, h) { g + h },
+        g: -> (h) { h**2 },
+        z: -> (x) { x + 1 }
+      )
+
+      sums.call(a:1, b:2, h:3, x:99).must_equal(
+        a: 1,
+        b: 2,
+        c: 3,
+        d: 4,
+        e: 5,
+        f: 12,
+        g: 9,
+        h: 3,
+        x: 99,
+        z: 100
       )
     end
   end
