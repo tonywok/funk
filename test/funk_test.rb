@@ -49,8 +49,8 @@ describe Funk do
       it "self reference" do
         identity = { a: -> (a) { a } }
         policy = Funk.compile(identity)
-        err = lambda { policy.call({}) }.must_raise(Funk::MissingDepenciesException)
-        err.message.must_match "Fn a is missing dependencies [:a]"
+        err = lambda { policy.call({}) }.must_raise(Funk::MissingDependenciesException)
+        err.message.must_match "Function :a is missing dependencies [:a]"
       end
     end
 

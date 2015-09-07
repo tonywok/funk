@@ -9,7 +9,7 @@ module Funk
       fn_map = map.each_with_object({}) do |(name, impl), fn_map|
         fn = fn_map[name] = Fn.new(name, impl)
         fn.dependencies.each do |dep_name|
-          fn_map[dep_name] ||= InputFn.new(dep_name) unless map.key?(dep_name)
+          fn_map[dep_name] ||= InputFn.new(dep_name)
         end
       end
       accum = Hash.new { |h,k| h[k] = [] }
