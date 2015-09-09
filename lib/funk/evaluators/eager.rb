@@ -27,13 +27,13 @@ module Funk
 
       def before_call(fn, input, instruments)
         instruments.each do |inst|
-          inst.before_call(fn, input)
+          inst.before_call(fn, input) if inst.respond_to?(:before_call)
         end
       end
 
       def after_call(fn, input, value, instruments)
         instruments.reverse.each do |inst|
-          inst.after_call(fn, input, value)
+          inst.after_call(fn, input, value) if inst.respond_to?(:after_call)
         end
       end
 
