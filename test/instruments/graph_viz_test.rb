@@ -13,7 +13,10 @@ describe Funk::Instruments::GraphViz do
       graphviz = result.instruments.first
       graphviz.digraph.must_equal([
         "digraph {",
+        "node c[label=< c <br/> 2 > shape=circle]",
+        "node b[label=< b <br/> 12 > shape=box]",
         "c -> b",
+        "node a[label=< a <br/> 14 > shape=box]",
         "b -> a",
         "c -> a",
         "}",
