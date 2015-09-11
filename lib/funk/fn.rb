@@ -33,18 +33,24 @@ module Funk
       end
     end
 
-    # NOTE: this won't work for keyword args
+    # Check for required arguments which are missing from input values.
+    # If an argument is optional we don't raise, and we also don't use `nil`
+    # so that the proper default value will be used by the callable.
+    #
+    # One might be tempted to raise this dependency logic up a level
+    # but be warned: one Fn instance could require an argument which is
+    # optional in another Fn.
+    #
+    # NOTE: we don't currently support keyword args
     def extract_argument_values(hash)
       missing = []
       args = []
       @parameters.each do |(type, name)|
         value = hash[name]
-        if value == Funk::NO_INPUT_PROVIDED
-          if REQUIRED_PARAM_TYPES.include?(type)
-            missing << name
-          end
-        else
+        if value != Funk::NO_INPUT_PROVIDED
           args << value
+        elsif REQUIRED_PARAM_TYPES.include?(type)
+          missing << name
         end
       end
 
