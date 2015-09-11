@@ -4,8 +4,6 @@ Funk is a structured computation implementation inspired by Prismatic's [Graph](
 
 ## Installation
 
-_Note:_ This has not yet been released on rubygems, but will be shortly.
-
 Add this line to your application's Gemfile:
 
 ```ruby
