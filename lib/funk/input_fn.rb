@@ -12,7 +12,6 @@ module Funk
     def initialize(name, _=nil)
       @name = name
       @dependencies = []
-      @required = false
     end
 
     def call(input)
@@ -21,14 +20,6 @@ module Funk
       else
         NO_INPUT_PROVIDED
       end
-    end
-
-    def required?
-      @required
-    end
-
-    def require!
-      @required = true
     end
   end
 end
