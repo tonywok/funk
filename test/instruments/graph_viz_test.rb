@@ -10,7 +10,7 @@ describe Funk::Instruments::GraphViz do
       }, instruments: [Funk::Instruments::GraphViz])
       result = graph.call(c: 2)
 
-      graphviz = result.instruments.first
+      graphviz = result.instruments["GraphViz"]
       graphviz.digraph.must_equal([
         "digraph {",
         "node c[label=< c <br/> 2 > shape=circle]",

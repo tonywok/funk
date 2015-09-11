@@ -5,7 +5,9 @@ module Funk
     attr_reader :instruments
 
     def initialize(instruments)
-      @instruments = instruments
+      @instruments = instruments.each_with_object({}) do |inst, obj|
+        obj[inst.class.name.split("::").last] = inst
+      end
       @result = {}
     end
 

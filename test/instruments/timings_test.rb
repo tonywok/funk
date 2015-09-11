@@ -9,7 +9,7 @@ describe Funk::Instruments::Timings do
     }, instruments: [Funk::Instruments::Timings])
     result = graph.call(c: 2)
 
-    timings = result.instruments.first
+    timings = result.instruments["Timings"]
     timings.each do |name, timing|
       assert [:a, :b, :c].include?(name)
       assert_kind_of Time, timing[:start]
