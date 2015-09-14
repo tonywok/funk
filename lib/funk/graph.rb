@@ -33,5 +33,8 @@ module Funk
       @nodes.each_key(&b)
     end
 
+    def input
+      @nodes.select {|fn| fn.is_a?(InputFn) }.map(&:name)
+    end
   end
 end

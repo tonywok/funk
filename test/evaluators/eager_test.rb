@@ -2,7 +2,6 @@ require "test_helper"
 
 describe Funk::Evaluators::Eager do
   describe ".call" do
-
     def evaluator
       fns = {
         a: -> (x, y=0) { x + y },
@@ -30,6 +29,32 @@ describe Funk::Evaluators::Eager do
         result[:a].must_equal(2)
         result[:b].must_equal(4)
       end
+    end
+  end
+
+  describe ".expected_input" do
+    it "tells you what input variables are expected to evaluate" do
+      fns = {
+        a: -> (x) { x },
+        b: -> (y) { a },
+      }
+      evaluator = Funk.compile(fns)
+      evaluator.expected_input_keys.must_equal(["x", "y"])
+    end
+  end
+
+  describe ".slice" do
+    it "compiles an evaluator for a subgraph using the provided nodes and their dependencies" do
+      evaluator = Funk.compile({
+        a: -> (x) { x*x },
+        b: -> (y) { y*y },
+        c: -> (b, y) { b*y },
+      })
+      evaluator.required_input.sort.must_equal(["x", "y"])
+
+      sliced_evaluator = evaluator.slice(:b, :c)
+      sliced_evaluator.required_input.sort.must_equal(["y"])
+      sliced_evaluator.call(y: 5).must_equal(b: 25, c: 125)
     end
   end
 end

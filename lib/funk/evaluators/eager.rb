@@ -16,6 +16,13 @@ module Funk
         end
       end
 
+      def expected_input(required_only: false)
+        input
+      end
+
+      def slice(*fns)
+      end
+
       private
 
       def evaluate(fn, input, instruments)
